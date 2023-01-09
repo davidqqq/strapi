@@ -64,8 +64,7 @@ class SqliteSchemaInspector {
   async getSchema() {
     const schema = { tables: [] };
     const tables = await this.getTables();
-
-    for (const tableName of tables) {
+    for (const tableName of this.db.config.excludeTables ? this.db.config.excludeTables(tables) : tables) {
       const columns = await this.getColumns(tableName);
       const indexes = await this.getIndexes(tableName);
       const foreignKeys = await this.getForeignKeys(tableName);
